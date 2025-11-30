@@ -7,3 +7,8 @@ class AndroidPlatform : Platform {
 }
 
 actual fun getPlatform(): Platform = AndroidPlatform()
+
+/**
+ * Gemini APIキーをBuildConfigから取得
+ */
+actual fun getGeminiApiKey(): String = BuildConfig.GEMINI_API_KEY

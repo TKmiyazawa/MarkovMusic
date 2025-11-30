@@ -27,8 +27,16 @@ object AppColors {
         val MarkovOrange = Color(0xFFFF6B35) // ビビッドオレンジ
         val MarkovPurple = Color(0xFFAA4FFF) // ビビッドパープル
 
+        // Gemini AIモード用（宇宙・未来的な色）
+        val GeminiBlue = Color(0xFF4285F4) // Googleブルー
+        val GeminiCyan = Color(0xFF00D4FF) // サイバーシアン
+        val GeminiMagenta = Color(0xFFE040FB) // ネオンマゼンタ
+
         // ランダムモードの音符をランダムに選ぶためのリスト
         val randomNoteColors = listOf(Random1, Random2, Random3)
+
+        // Geminiモードの音符の色リスト
+        val geminiNoteColors = listOf(GeminiBlue, GeminiCyan, GeminiMagenta)
     }
 
     // Playhead（再生バー）
@@ -41,6 +49,7 @@ object AppColors {
         val Secondary = Color(0xFF87CEEB) // スカイブルー
         val Markov = Color(0xFFFF6B9D) // ピンク系
         val Random = Color(0xFFFFB347) // オレンジ系
+        val Gemini = Color(0xFF4285F4) // Googleブルー（Gemini AI用）
         val Play = Color(0xFF4ECDC4) // ターコイズ
         val Stop = Color(0xFFFF6B6B) // コーラルレッド
     }

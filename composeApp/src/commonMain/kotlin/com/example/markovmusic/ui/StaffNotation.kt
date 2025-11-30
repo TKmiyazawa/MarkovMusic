@@ -134,6 +134,10 @@ private fun getNoteColor(generationMode: String?, index: Int): Color {
                 else -> AppColors.NoteColors.MarkovPurple
             }
         }
+        "AI生成 (Gemini)" -> {
+            // Gemini AIモード：宇宙・未来的なブルー/シアン/マゼンタを交互に
+            AppColors.NoteColors.geminiNoteColors[index % AppColors.NoteColors.geminiNoteColors.size]
+        }
         else -> Color.Gray
     }
 }

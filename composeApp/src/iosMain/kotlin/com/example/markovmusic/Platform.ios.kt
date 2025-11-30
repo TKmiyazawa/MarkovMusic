@@ -7,3 +7,8 @@ class IOSPlatform: Platform {
 }
 
 actual fun getPlatform(): Platform = IOSPlatform()
+
+/**
+ * Gemini APIキー取得（iOS版は空文字を返す - iOSではGemini非対応）
+ */
+actual fun getGeminiApiKey(): String = ""
