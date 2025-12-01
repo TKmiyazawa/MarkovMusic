@@ -5,3 +5,6 @@ PRODUCT_BUNDLE_IDENTIFIER=com.example.markovmusic.MarkovMusic$(TEAM_ID)
 
 CURRENT_PROJECT_VERSION=1
 MARKETING_VERSION=1.0
+
+// Gemini API Key - set your key here or in environment variable
+GEMINI_API_KEY=AIzaSyB1m_NmsnMmkKjMqZ5tjJRvg9VsPxfVUEU
