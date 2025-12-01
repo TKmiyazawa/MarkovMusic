@@ -1,0 +1,12 @@
+TEAM_ID=
+
+PRODUCT_NAME=MarkovMusic
+PRODUCT_BUNDLE_IDENTIFIER=com.example.markovmusic.MarkovMusic$(TEAM_ID)
+
+CURRENT_PROJECT_VERSION=1
+MARKETING_VERSION=1.0
+
+// Gemini API Key - This value is auto-generated from local.properties by Gradle
+// Run `./gradlew updateIosGeminiApiKey` to populate this value
+// DO NOT commit actual API keys to Config.xcconfig
+GEMINI_API_KEY=

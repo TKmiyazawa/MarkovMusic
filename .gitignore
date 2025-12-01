@@ -1,19 +1,48 @@
+# Gradle & Build
 *.iml
 .kotlin
-.gradle
+.gradle/
 **/build/
-xcuserdata
 !src/**/build/
-local.properties
-.idea
+
+# IDE
+.idea/
 .DS_Store
-captures
-.externalNativeBuild
-.cxx
+captures/
+
+# Android Native
+.externalNativeBuild/
+.cxx/
+
+# Secrets & Credentials - NEVER COMMIT
+local.properties
+*.jks
+*.keystore
+secrets.properties
+google-services.json
+*.pem
+*.p12
+iosApp/Configuration/Config.xcconfig
+
+# iOS / Xcode
+xcuserdata/
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
+*.xcuserstate
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Node (if any)
 node_modules/
+
+# Misc
+*.log
+*.tmp
+Thumbs.db
