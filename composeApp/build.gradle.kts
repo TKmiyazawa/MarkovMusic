@@ -1,6 +1,6 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -32,7 +32,13 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.google.generativeai)
+            implementation(libs.ktor.client.okhttp)
         }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -43,6 +49,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -88,5 +98,39 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+}
+
+// Task to update iOS Config.xcconfig with GEMINI_API_KEY from local.properties
+val updateIosGeminiApiKey by tasks.registering {
+    val localPropsFile = rootDir.resolve("local.properties")
+    val configFile = rootDir.resolve("iosApp/Configuration/Config.xcconfig")
+
+    inputs.file(localPropsFile).optional()
+    outputs.file(configFile)
+
+    doLast {
+        val geminiApiKey = if (localPropsFile.exists()) {
+            Properties().apply {
+                localPropsFile.inputStream().use { load(it) }
+            }.getProperty("GEMINI_API_KEY") ?: ""
+        } else ""
+
+        if (configFile.exists()) {
+            val content = configFile.readText()
+            val updatedContent = content.replace(
+                Regex("GEMINI_API_KEY=.*"),
+                "GEMINI_API_KEY=$geminiApiKey"
+            )
+            configFile.writeText(updatedContent)
+            println("Updated iOS Config.xcconfig with GEMINI_API_KEY")
+        } else {
+            println("Warning: Config.xcconfig not found at ${configFile.absolutePath}")
+        }
+    }
+}
+
+// Run updateIosGeminiApiKey before iOS framework tasks
+tasks.matching { it.name.contains("compileKotlinIos") }.configureEach {
+    dependsOn(updateIosGeminiApiKey)
 }
 
