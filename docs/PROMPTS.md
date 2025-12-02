@@ -430,3 +430,60 @@ Android専用のSDK (`google-ai-client`) はiOSネイティブでは動作しな
 - Androidと同じく、Mode A/B/C 全てがiPhone上で動作し、音が鳴ること。
 
 この移行作業に必要な主要なコード変更と、Ktorを使ったGemini APIクライアントの実装を提示してください。
+
+
+
+
+
+**Prompt**# Documentation Request: Generate GitHub README.md
+
+このプロジェクトのGitHubリポジトリ用に、日本人の開発者や学習者が見てすぐに理解でき、かつ技術的な興味を惹く `README.md` を作成してください。
+
+## 1. Project Overview & Story
+タイトル: **Melody Math - 確率と音楽 -**
+サブタイトル: *From 2005 Thesis to 2025 AI Tech*
+
+**背景ストーリー**:
+- 2005年、開発者が大学生時代に「確率（マルコフ連鎖）を音楽で体感する」ために作成した卒業研究（Excel VBA + Flash）を、20年の時を経て現代の技術で完全リバイバル。
+- **目的**: 中学3年生に「ランダム」「確率モデル」「生成AI（ニューラルネットワーク）」の違いを聴覚と視覚で体験させ、数学と情報の面白さを伝えること。
+
+## 2. Features (The 3 Modes)
+以下の3つのモードを表形式などで分かりやすく比較してください。
+1.  **Mode A: Random (Chaos)**
+    - 単なるランダム生成。不協和音。カオス。
+2.  **Mode B: Markov Chain (Probability)**
+    - 2005年のロジックをKotlinで再現。
+    - パッヘルベルのカノン進行に基づき、確率行列を用いて「美しい調和」を生成。
+3.  **Mode C: Gemini AI (Intelligence)**
+    - Google Gemini 1.5 Flashを使用。
+    - コンテキスト（楽曲全体の構成）を理解し、JSONモードで構造化されたメロディを生成。
+    - 「確率」を超えた「知能」による作曲。
+
+## 3. Tech Stack
+技術的な見どころを箇条書きで記載してください。
+- **Core**: Kotlin Multiplatform (KMP) - Android & iOS fully supported.
+- **UI**: Jetpack Compose Multiplatform (Canvas drawing for Sheet Music).
+- **AI**: Google AI Client SDK (Gemini 1.5 Flash).
+- **Audio**:
+    - Android: `AudioTrack`
+    - iOS: `AVFoundation` (via Kotlin Native interop)
+- **Architecture**:
+    - Clean Architecture styling.
+    - JSON Mode for strict structured output from LLM.
+
+## 4. Getting Started (Setup)
+開発者がクローンしてすぐに動かせるよう、手順を書いてください。
+1.  Clone repository.
+2.  Get API Key from Google AI Studio.
+3.  Set API Key in `local.properties` (e.g., `GEMINI_API_KEY=...`).
+4.  Run on Android Emulator or iOS Simulator.
+
+## 5. Style & Tone
+- 言語: **日本語**
+- 雰囲気: アカデミックだが堅苦しくない、教育×テックのワクワク感。
+- 装飾:
+    - 冒頭にプロジェクトのロゴやスクショを貼るためのプレースホルダー `![Demo Image](path/to/image.png)` を配置。
+    - バッジ（Kotlin, Compose, Gemini, License MITなど）を使用。
+    - 絵文字（🎵, 🎲, 🤖）を適度に使用して視認性を高める。
+
+この要件に基づき、マークダウン形式で `README.md` の全文を出力してください。
