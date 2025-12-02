@@ -388,8 +388,45 @@ Geminiに対して、以下の要件を満たすJSONを生成させるプロン�
 この機能追加を行うためのコードを提示してください。
 
 
-
-
 ## Phase 2: アーキテクチャ設計
 **Goal**: Android/iOS両対応のためのKMP化とVertex AI統合。
-**Prompt**: (KMP移行のプロンプトをここに貼り付け)
+**Prompt**: # Project Migration: Support iOS (Kotlin Multiplatform)
+
+既存のAndroidアプリ（Jetpack Compose）を拡張し、iPhone (iOS) でも動作するように **Kotlin Multiplatform (KMP) + Compose Multiplatform** 化を行います。
+ターゲットは3名のデモ用なので、厳密なリリース要件よりも「動くこと」を優先します。
+
+## 1. Project Restructuring (KMP Setup)
+プロジェクトをKMP構成に変更してください。
+- **Source Sets**:
+  - `commonMain`: 共通ロジック (`MusicGenerator`, `Note`, `MarkovChain`) と共通UI (`MusicScreen`, `SheetMusicCanvas`) を移動。
+  - `androidMain`: Android固有の実装（既存のActivityなど）。
+  - `iosMain`: iOS固有の実装。
+- **Build Script**: `build.gradle.kts` に `cocoapods` または `packForXcode` タスク、およびiOSターゲット設定を追加してください。
+
+## 2. Abstracting Platform Specifics (expect/actual)
+以下の2つの機能を `expect` インターフェースとして定義し、iOS側の `actual` 実装を追加してください。
+
+### A. Audio Engine (`ToneSynthesizer`)
+Androidの `AudioTrack` はiOSで動きません。
+- `commonMain`: `interface AudioPlayer { fun playNote(frequency: Double, duration: Double) }` を定義。
+- `iosMain`: **AVFoundation (`AVAudioEngine` または `AVAudioPlayer`)** を使用して、指定された周波数の正弦波（Sine Wave）を生成・再生する実装を行ってください。
+  - ※複雑なPCM合成が難しければ、単純なビープ音やシステムサウンドで代用しても構いませんが、可能ならCoreAudio/AVAudioEngineでの実装を試みてください。
+
+### B. Gemini API Access (Network Layer)
+Android専用のSDK (`google-ai-client`) はiOSネイティブでは動作しない可能性があります。
+- 共通ロジック (`commonMain`) で **Ktor Client** を使用して、Google AI Studio (Gemini API) のRESTエンドポイントを直接叩く実装に変更してください。
+- これにより、OSを問わず `Mode C` が動作するようにします。
+
+## 3. UI Compatibility Checks
+- **Canvas Text**: Androidの `nativeCanvas.drawText` はiOSで動きません。Compose Multiplatformの `drawText` (ui-graphics) を使用するか、プラットフォームごとの描画処理に分岐させてください。
+- **Resources**: フォントや画像などのリソース管理を `compose.resources` (KMP) に準拠させてください。
+
+## 4. Entry Point (iOS App)
+- iOSアプリのエントリーポイントとなる `MainViewController` (ComposeUIViewController) を `iosMain` に作成してください。
+- Xcodeプロジェクト側から呼び出すための最低限のSwiftコード（`ContentView.swift`）も提示してください。
+
+## Goals
+- Android Studio上で `iosApp` の実行構成を作成し、iOS Simulatorでアプリが起動すること。
+- Androidと同じく、Mode A/B/C 全てがiPhone上で動作し、音が鳴ること。
+
+この移行作業に必要な主要なコード変更と、Ktorを使ったGemini APIクライアントの実装を提示してください。
