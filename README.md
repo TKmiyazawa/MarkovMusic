@@ -8,8 +8,9 @@
 
 > *From 2005 Thesis to 2025 AI Tech*
 
-![Demo Screenshot](docs/images/demo.png)
-<!-- TODO: スクリーンショットを追加 -->
+<p align="center">
+  <img src="docs/images/demo.png" width="300" alt="Melody Math Demo Screen">
+</p>
 
 ---
 
