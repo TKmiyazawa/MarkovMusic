@@ -542,3 +542,21 @@ Android専用のSDK (`google-ai-client`) はiOSネイティブでは動作しな
 - `.gitignore` に `local.properties` が含まれていることを再確認する手順を含めてください。
 
 この設定を行うための Gradle ファイルと Kotlin コードの修正案を提示してください。
+
+
+
+**Prompt**# Documentation Update: Setup Demo Screenshot
+
+GitHubのREADME.mdに、アプリのデモ画面（スクリーンショット）を表示させるための準備を行ってください。
+
+## 1. Create Directory
+- プロジェクトルートに、画像を格納するためのディレクトリ `docs/images/` を作成してください。
+
+## 2. Update README.md
+- `README.md` ファイル内の画像リンク部分（プレースホルダー）を検索し、以下のHTMLタグに置き換えてください。
+- Markdown記法ではなくHTMLタグを使用することで、画像が巨大になりすぎないようサイズ調整を行います。
+
+```html
+<p align="center">
+  <img src="docs/images/demo.png" width="300" alt="Melody Math Demo Screen">
+</p>
