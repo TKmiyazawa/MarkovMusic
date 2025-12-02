@@ -487,3 +487,32 @@ Android専用のSDK (`google-ai-client`) はiOSネイティブでは動作しな
     - 絵文字（🎵, 🎲, 🤖）を適度に使用して視認性を高める。
 
 この要件に基づき、マークダウン形式で `README.md` の全文を出力してください。
+
+
+
+
+**Prompt**# Security Audit Request: Pre-Publication Check
+
+このプロジェクトをGitHubでPublic公開する準備をしています。
+コードベースをスキャンし、セキュリティリスクとなる情報が含まれていないか監査し、修正案を提示してください。
+
+## 1. API Key & Secrets Check
+コード内（特に `MusicGenerator`, `GeminiMelodyGenerator`, `App` クラスなど）に、APIキーなどの機密情報がハードコーディング（直書き）されていないか確認してください。
+- **リスク**: "AIza" で始まる文字列や、ハードコードされた認証トークン。
+- **修正案**: もし見つかった場合、それを `local.properties` に移動し、`BuildConfig` 経由で参照するようにコードを書き換える手順を示してください。
+
+## 2. .gitignore Validation
+現在の `.gitignore` ファイルを確認（または新規作成）し、以下のファイルが確実に除外設定されているかチェックしてください。
+- `local.properties` (Android/KMP secrets)
+- `*.jks`, `*.keystore` (Signing keys)
+- `build/`, `.gradle/`, `.idea/` (Build & IDE files)
+- `iosApp/iosApp.xcodeproj/project.xcworkspace/` (User data)
+- `*.DS_Store`
+
+## 3. Implementation of Secure API Key Access
+もし現状がハードコーディングになっている場合、以下の実装に変更するためのコードを提示してください。
+1.  **local.properties**: `GEMINI_API_KEY=your_key_here` を追記する指示。
+2.  **build.gradle.kts**: `buildConfigField` を使って、Gradleが `local.properties` からキーを読み込み、Android/Commonコードに定数として生成する設定。
+3.  **Kotlin Code**: 生成された `BuildConfig.GEMINI_API_KEY` をコード内で使用する修正。
+
+この監査を行い、安全に公開できる状態にするための修正ステップを教えてください。
