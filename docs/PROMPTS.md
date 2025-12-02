@@ -74,6 +74,30 @@ Canvas上の音符の描画ロジックを修正してください。
 
 このデザイン変更を反映した `SheetMusicCanvas` コンポーザブルと、配色の定義コードを提示してください。
 
+**Prompt**:# Logic & UI Update Request: 30s Duration & Scrolling
+
+前回のコードをベースに、楽曲の規模拡大とスクロール機能を追加してください。
+
+## 1. Duration Update (楽曲の長さを30秒に)
+音楽生成ロジック (`MusicGenerator`) を修正し、生成される曲の長さを**約30秒**に固定してください。
+- テンポ（BPM）を定義し、30秒分に必要な「小節数」または「音符の総数」を計算して生成ループを回してください。
+- 例: BPM 120の場合、1拍0.5秒なので、30秒＝60拍分の音符データを生成する。
+
+## 2. Horizontal Scrolling (五線譜の横スクロール)
+30秒分の五線譜は画面幅に収まらないため、横スクロール可能なUIに変更してください。
+- **Canvasの幅**: 固定幅（`fillMaxWidth`）ではなく、生成された音符の量に応じた「巨大な幅（Total Width）」を持つようにしてください。
+- **スクロール実装**: `Modifier.horizontalScroll(rememberScrollState())` を使用して、ユーザーが手動で五線譜を左右にスワイプできるようにしてください。
+
+## 3. Auto-Scrolling with Playhead (再生同期スクロール)
+再生中、赤い棒（Playhead）が画面外に出てしまわないよう、アニメーションに合わせて**自動でスクロール**させてください。
+- Playheadが画面の右側に近づいたら、自動的に右へスクロールし、常にPlayheadが表示領域内に収まるように `ScrollState.scrollTo()` を制御してください。
+- Flashアプリの雰囲気を再現するため、「Playheadが楽譜の上を走る」感覚を維持しつつ、カメラ（スクロール位置）がそれを追従する挙動にしてください。
+
+これらの変更を反映した `MusicScreen` および `SheetMusic` コンポーザブルのコードを提示してください。
+
+
+
+
 ## Phase 2: アーキテクチャ設計
 **Goal**: Android/iOS両対応のためのKMP化とVertex AI統合。
 **Prompt**: (KMP移行のプロンプトをここに貼り付け)
