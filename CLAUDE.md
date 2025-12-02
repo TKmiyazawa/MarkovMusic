@@ -4,61 +4,65 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-MarkovMusic is a Kotlin Multiplatform project targeting Android and iOS using Compose Multiplatform. The project uses a shared codebase for UI and business logic with platform-specific implementations where needed.
+**Melody Math** (MarkovMusic) is a Kotlin Multiplatform educational app demonstrating three melody generation modes: random, Markov chain, and AI (Gemini). Based on a 2005 thesis project, rebuilt with modern tech stack.
 
 ## Build Commands
 
-### Android
 ```bash
-# Build debug APK
-./gradlew :composeApp:assembleDebug
+# Android
+./gradlew :composeApp:assembleDebug          # Debug APK
+./gradlew :composeApp:assembleRelease        # Release APK
+./gradlew :composeApp:testDebugUnitTest      # Run tests
+./gradlew clean                               # Clean build
 
-# Build release APK
-./gradlew :composeApp:assembleRelease
-
-# Run tests
-./gradlew :composeApp:testDebugUnitTest
-
-# Clean build
-./gradlew clean
+# iOS API Key sync (reads from local.properties)
+./gradlew updateIosGeminiApiKey
 ```
 
-### iOS
-For iOS builds, open the `/iosApp` directory in Xcode and build from there, or use the IDE's run configuration.
+iOS builds: Open `iosApp/iosApp.xcodeproj` in Xcode.
+
+## API Key Configuration
+
+1. Add `GEMINI_API_KEY=your_key` to `local.properties` (Android reads via BuildConfig)
+2. For iOS: `cp iosApp/Configuration/Config.xcconfig.template iosApp/Configuration/Config.xcconfig`, then run `./gradlew updateIosGeminiApiKey`
 
 ## Architecture
 
 ### Multiplatform Structure
-- **composeApp/src/commonMain**: Shared code for all platforms including UI components and business logic
-- **composeApp/src/androidMain**: Android-specific implementations (MainActivity, platform-specific APIs)
-- **composeApp/src/iosMain**: iOS-specific implementations (MainViewController, platform-specific APIs)
-- **composeApp/src/commonTest**: Shared test code
-- **iosApp**: Native iOS app entry point and SwiftUI integration
+```
+composeApp/src/
+├── commonMain/kotlin/com/example/markovmusic/
+│   ├── App.kt                    # Main Compose UI entry point
+│   ├── model/                    # Data models (Note, Pitch, Chord, Score)
+│   ├── generator/                # Music generation (MusicGenerator interface)
+│   │   ├── RandomGenerator.kt    # Uniform random note selection
+│   │   ├── MarkovChainGenerator.kt # Weighted probability transitions
+│   │   └── GeminiMelodyGenerator.kt # AI-powered via Ktor client
+│   ├── network/                  # GeminiApiClient (Ktor-based)
+│   ├── audio/                    # ToneSynthesizer (expect declaration)
+│   └── ui/                       # StaffNotation, PlaybackController, components
+├── androidMain/                  # actual implementations (AudioTrack, BuildConfig access)
+├── iosMain/                      # actual implementations (AVAudioEngine, Info.plist access)
+└── commonTest/                   # Shared tests
+```
 
-### Source Set Dependencies
-The project uses Kotlin Multiplatform's source set model:
-- `commonMain` contains shared code that compiles for all targets
-- Platform-specific folders (`androidMain`, `iosMain`) provide actual implementations of expect/actual declarations
-- Platform code can access platform-specific APIs (e.g., Android SDK, iOS CoreCrypto)
+### Key expect/actual Declarations
+- `ToneSynthesizer` - Audio synthesis: Android uses `AudioTrack`, iOS uses `AVAudioEngine`
+- `getGeminiApiKey()` - API key retrieval: Android reads `BuildConfig`, iOS reads `Info.plist`
+- `TextRenderer` - Canvas text measurement (platform-specific)
 
-### Key Configuration Files
-- **gradle/libs.versions.toml**: Centralized version catalog for all dependencies
-- **composeApp/build.gradle.kts**: Main module configuration with platform targets and dependencies
-- **settings.gradle.kts**: Project structure and repository configuration
+### Music Domain Model
+- `Pitch` - Enum of musical pitches (C4-B5) with MIDI numbers and frequencies
+- `Chord` - Chord definitions with `CANON_PROGRESSION` (Pachelbel's Canon: D→A→Bm→F#m→G→D→G→A)
+- `Note` - Contains pitches list, start time, duration, and optional chord name
+- `Score` - Collection of notes with BPM and total beats
 
-### Platform Integration
-- **Android**: Uses `MainActivity` extending `ComponentActivity` with `setContent { App() }` to launch the Compose UI
-- **iOS**: Framework is generated with `baseName = "ComposeApp"` and `isStatic = true`, consumed by the native iOS app in `/iosApp`
+### Generation Modes
+1. **Random** - Uniform distribution across all pitches
+2. **Markov Chain** - Weighted transitions based on current chord's probability matrix
+3. **Gemini AI** - Prompts Gemini 1.5 Flash via Ktor HTTP client with JSON mode
 
-### Compilation Targets
-- Android: JVM 11 target with minSdk 24, targetSdk 36
-- iOS: `iosArm64` (devices) and `iosSimulatorArm64` (simulator)
-
-## Dependencies
-The project uses the version catalog pattern. To add dependencies:
-1. Add version to `gradle/libs.versions.toml` under `[versions]`
-2. Add library reference under `[libraries]`
-3. Reference in `composeApp/build.gradle.kts` using `libs.` prefix in the appropriate source set
-
-## Resource Handling
-Compose Multiplatform resources are located in `composeApp/src/commonMain/composeResources/` and accessed via generated `Res` class (e.g., `Res.drawable.compose_multiplatform`).
+## Key Configuration Files
+- `gradle/libs.versions.toml` - Version catalog for all dependencies
+- `composeApp/build.gradle.kts` - Module config with `updateIosGeminiApiKey` Gradle task
+- `iosApp/Configuration/Config.xcconfig` - iOS environment variables (gitignored)
