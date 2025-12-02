@@ -346,6 +346,49 @@ Androidアプリから直接APIキーを使用せず、**Firebase Cloud Function
 
 なお、Vertex AIの初期化やIAM設定についてはコード化不要ですが、必要な権限（`roles/aiplatform.user` 等）についてはコメントで補足してください。
 
+**Prompt**:# Feature Request: Integration of Generative AI (Mode C)
+
+対象ユーザー（3名限定）に対し、ニューラルネットワークの優位性を示すため、既存の2つのモードに加え、**「Mode C: AI Composer (Gemini)」**を実装してください。
+セキュリティ要件は低いため、Android標準のGoogle AI Client SDKを使用し、APIキーは `local.properties` または `BuildConfig` から読み込む簡易実装で構いません。
+
+## 1. Dependency & Setup
+- `com.google.ai.client.generativeai` ライブラリを追加してください。
+- `GeminiMelodyGenerator` クラスを作成し、`GenerativeModel` (Model: `gemini-1.5-flash`) のインスタンス化ロジックを実装してください。
+- **重要**: レスポンスを確実にパースするため、`generationConfig` で `responseMimeType = "application/json"` を指定してください。
+
+## 2. Prompt Engineering (Domain Logic)
+Geminiに対して、以下の要件を満たすJSONを生成させるプロンプトを構築してください。
+
+- **Role**: "あなたは天才的な作曲家です。"
+- **Task**: "パッヘルベルのカノン（D Major）のコード進行 [D, A, Bm, F#m, G, D, G, A] に完璧にマッチする、美しく感動的なメロディを30秒分生成してください。"
+- **Output Format**:
+  JSON配列形式で出力すること。
+  例: `[{"pitch": "D5", "duration": 0.5}, {"pitch": "C#5", "duration": 0.5}, ...]`
+  - `pitch`: 音高（例: C4, D#5）。アプリの既存の音階定義に合わせること。
+  - `duration`: 音価（1.0 = 4分音符, 0.5 = 8分音符など）。
+
+## 3. UI/UX Updates
+操作パネルを修正し、第3の選択肢を追加してください。
+
+- **Button Layout**:
+  - 1段目: [ランダム (Mode A)] [マルコフ (Mode B)]
+  - 2段目: **[AI生成 - Gemini (Mode C)]** (新規追加)
+  - 3段目: [再生/停止] [再作成]
+
+- **Loading State**:
+  - Geminiの生成には数秒かかるため、生成中は画面中央に `CircularProgressIndicator` を表示し、UI操作をブロックしてください。
+  - 完了後、返ってきたJSONをパースして `Note` オブジェクトのリストに変換し、五線譜に描画してください。
+
+## 4. Implementation Steps
+1. `libs.versions.toml` (または build.gradle) への依存関係追加。
+2. JSONパース用のデータクラス (`Serializable`) の定義。
+3. `GeminiMelodyGenerator` の `generateMelody(): List<Note>` 実装。
+4. `MusicScreen` への統合（ViewModelでの非同期呼び出し処理）。
+
+この機能追加を行うためのコードを提示してください。
+
+
+
 
 ## Phase 2: アーキテクチャ設計
 **Goal**: Android/iOS両対応のためのKMP化とVertex AI統合。
