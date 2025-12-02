@@ -178,6 +178,35 @@ Canvas上の音符の描画ロジックを修正してください。
 これにより、「画面上はシンプルなメロディラインだが、下を見るとコード進行（ルール）が表示されており、耳ではその調和が聴こえる」という構成を実現してください。
 
 
+**Prompt**:# UI Layout Update Request: Control Panel at Bottom
+
+画面レイアウトを変更し、操作系を画面下部に集約してください。
+五線譜の表示領域を最大化し、指が届きやすい位置にボタンを配置します。
+
+## 1. Main Layout Structure (全体構成)
+`MusicScreen` のルートレイアウトを `Column` で構成し、以下の2つのセクションに分けてください。
+
+1.  **Top Section: Sheet Music Display (五線譜エリア)**
+    - `Modifier.weight(1f)` を使用して、画面の上部（残り全ての領域）を占有するようにしてください。
+    - ここにスクロール可能な `SheetMusicCanvas` を配置します。
+
+2.  **Bottom Section: Control Panel (操作パネル)**
+    - 五線譜の下に固定配置される領域です。
+    - 背景色を少し変えるか、影（Elevation）をつけて、五線譜エリアと区別してください。
+    - 以下のボタンを `Row` を使って横並びに配置してください：
+        - **[ランダム生成 (Mode A)]**
+        - **[マルコフ連鎖生成 (Mode B)]**
+        - **[再生 / 停止 (Play/Stop)]**
+
+## 2. Button Styling & Arrangement
+- ボタンは `Arrangement.SpaceEvenly` または `Center` で等間隔に配置してください。
+- 前回の「ポップな配色」指定を引き継ぎ、大きく押しやすいボタン（丸みを帯びた形状）にしてください。
+
+## 3. Important: Scroll Separation
+- **重要**: 五線譜は横スクロールしますが、**下の操作ボタンはスクロールせず、常に画面下に固定**されている必要があります。
+
+このレイアウト変更を反映した `MusicScreen` の修正コードを提示してください。
+
 
 
 ## Phase 2: アーキテクチャ設計
