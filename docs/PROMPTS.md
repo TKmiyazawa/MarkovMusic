@@ -516,3 +516,29 @@ Android専用のSDK (`google-ai-client`) はiOSネイティブでは動作しな
 3.  **Kotlin Code**: 生成された `BuildConfig.GEMINI_API_KEY` をコード内で使用する修正。
 
 この監査を行い、安全に公開できる状態にするための修正ステップを教えてください。
+
+
+
+**Prompt**# Configuration Task: Secure API Key Setup for KMP
+
+新しいAPIキーを作成しました。これをソースコードに直書きせず、`local.properties` から読み込んで安全に使用できるようにプロジェクトを設定してください。
+
+## 1. Local Properties Setup
+- プロジェクトルートの `local.properties` ファイルから `GEMINI_API_KEY` というプロパティを読み込むロジックを `composeApp/build.gradle.kts` (または `app/build.gradle.kts`) に追加してください。
+- **注意**: `local.properties` が存在しない場合のフォールバック（空文字など）も考慮してください。
+
+## 2. BuildConfig Generation (KMP / Android)
+- **Android側**:
+  - `buildConfigField` を使用して、読み込んだキーを `BuildConfig.GEMINI_API_KEY` として生成してください。
+  - `buildFeatures { buildConfig = true }` が有効になっているか確認してください。
+
+## 3. Passing Key to Shared Logic (CommonMain)
+- KMPの `commonMain` は直接 Androidの `BuildConfig` を参照できない場合があります。
+- 以下のいずれかの方法で、共通コードがAPIキーを受け取れるように修正してください：
+  - **方法A (推奨)**: `GeminiMelodyGenerator` クラスのコンストラクタで `apiKey: String` を受け取るようにし、Android側の呼び出し元（MainActivity等）で `BuildConfig.GEMINI_API_KEY` を渡す。
+  - **方法B**: `expect object AppConfig { val apiKey: String }` を定義し、platform側で実装する。
+
+## 4. Verification
+- `.gitignore` に `local.properties` が含まれていることを再確認する手順を含めてください。
+
+この設定を行うための Gradle ファイルと Kotlin コードの修正案を提示してください。
