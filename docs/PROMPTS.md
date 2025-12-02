@@ -123,6 +123,39 @@ Canvas上の音符の描画ロジックを修正してください。
 この挙動を実現するための `MusicScreen` 内の `LaunchedEffect` 周りの修正コードを提示してください。
 
 
+**Prompt**:# Logic & Audio Update Request: Implementing Polyphony (Chords)
+
+中学生が聴いた瞬間に「こっちは美しい！」「こっちは変だ！」と明確に区別できるよう、単音（Melody）だけでなく**和音（Chords/Harmony）**を実装してください。
+協和音（キレイな響き）と不協和音（濁った響き）の対比を作ることで、マルコフ連鎖モデルの有効性を強調します。
+
+## 1. Audio Engine Update (Polyphony Support)
+現在の `ToneSynthesizer` は単音生成のみになっていると思われます。これを**和音再生（多重音再生）**に対応させてください。
+- 複数の周波数の正弦波（Sine Wave）を足し合わせて（Mixing）、1つの音声バッファとして生成するロジックに変更してください。
+- 音割れを防ぐため、合成後の振幅が `Short.MAX_VALUE` を超えないよう正規化（Normalization）またはリミッター処理を行ってください。
+
+## 2. Music Logic Update (Chord Progression)
+`MusicGenerator` を拡張し、モードごとに和音の扱いを変えてください。
+
+### Mode A: Random Generation (Chaos)
+- **不協和音の生成**: ランダムに選ばれたルート音に対し、音楽理論を無視したランダムな音程で音を重ねてください（例: ド + ド# + ファ など）。
+- 聴いた瞬間に「不気味」「適当」と感じられる、カオスな響きを目指してください。
+
+### Mode B: Markov Chain (Canon Progression)
+- **カノン進行の和音**: パッヘルベルのカノン（D Major）のコード進行（D -> A -> Bm -> F#m -> G -> D -> G -> A）に完全に従った和音を生成してください。
+- **構成**:
+  - **伴奏**: 各小節の頭で、その小節のコード（3和音）をジャン！と鳴らす、またはアルペジオにする。
+  - **メロディ**: 既存のマルコフ連鎖ロジックで生成された単音メロディを重ねる。
+- これにより、「音楽の授業で聴いたような美しい響き」を実現してください。
+
+## 3. Visual Update (Stacked Notes)
+五線譜（Canvas）上でも和音が視認できるようにしてください。
+- 同じタイミング（X座標）に複数の音符がある場合、それらを縦に並べて描画してください。
+- 和音の場合、棒（Stem）を連結して描画できるとベストですが、まずは単純に「おたまじゃくしが縦に並んでいる」状態でも構いません。
+
+これらの変更を反映した `ToneSynthesizer`, `MusicGenerator`, および `SheetMusicCanvas` の修正コードを提示してください。
+
+
+
 ## Phase 2: アーキテクチャ設計
 **Goal**: Android/iOS両対応のためのKMP化とVertex AI統合。
 **Prompt**: (KMP移行のプロンプトをここに貼り付け)
