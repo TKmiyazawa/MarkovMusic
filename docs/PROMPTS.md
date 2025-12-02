@@ -560,3 +560,24 @@ GitHubのREADME.mdに、アプリのデモ画面（スクリーンショット�
 <p align="center">
   <img src="docs/images/demo.png" width="300" alt="Melody Math Demo Screen">
 </p>
+
+
+
+
+
+**Prompt**---
+
+### この後の手順（あなたが行うこと）
+
+Claude Codeが処理を終えたら、以下の3ステップで画像が表示されるようになります。
+
+1.  Android Studioのエミュレータや実機でアプリを動かし、**スクリーンショットを撮影**します。
+2.  その画像ファイルの名前を **`demo.png`** に変更します。
+3.  プロジェクト内の **`docs/images/`** フォルダの中に、その画像を入れます。
+
+その後、以下のコマンドでGithubに反映させてください。
+
+```bash
+git add docs/images/demo.png README.md
+git commit -m "Add demo screenshot"
+git push origin main
