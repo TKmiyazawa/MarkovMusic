@@ -315,7 +315,36 @@ Canvas上の音符の描画ロジックを修正してください。
 
 これにより、「音符が五線譜の上空に浮遊している」状態を直し、正しく楽譜として読める位置関係に修正したコードを提示してください。
 
+**Prompt**:# Role
+あなたはGoogle Cloud Professional Cloud ArchitectおよびAndroidのエキスパートです。
 
+# Task
+既存の「Melody Math」アプリに、Google Cloud Vertex AI (Gemini 1.5 Flash) を活用した「AI解説機能」を追加するアーキテクチャとクライアントコードを提案してください。
+
+# Architecture Requirement
+Androidアプリから直接APIキーを使用せず、**Firebase Cloud Functions (2nd Gen)** を経由してVertex AIを呼び出すBFFパターンを採用します。
+
+1.  **Backend (Cloud Functions)**:
+    - Language: TypeScript or Kotlin.
+    - Trigger: `onCall` (Callable function).
+    - Logic:
+        - クライアントから「生成された音符のリスト（Noteの配列）」と「コード進行」を受け取る。
+        - Vertex AI API (Gemini 1.5 Flash) を呼び出す。
+        - Prompt: 「以下の音符列は[コード進行]に基づいて生成されました。中学生に向けて、このメロディの特徴や数学的な面白さを、先生のような口調で100文字以内で解説し、曲のタイトルを提案してください。」
+        - 結果をJSONで返す `{ "comment": "...", "title": "..." }`。
+
+2.  **Frontend (Android/Kotlin)**:
+    - `MusicScreen` に「AI解説を聞く（Ask AI Teacher）」ボタンを追加（生成完了後のみ有効）。
+    - ボタン押下時、`FirebaseFunctions` SDKを使って上記関数を呼び出す。
+    - 返ってきた解説とタイトルを、ダイアログまたは画面下部のカードでリッチに表示する。
+    - 通信中はローディングインジケータ（`CircularProgressIndicator`）を表示する。
+
+# Deliverables
+- Cloud Functionsのコードスニペット（Vertex AI SDKの使用箇所）。
+- Android側の `AITeacherRepository` (suspend functionでAPIを叩く) の実装。
+- UIの変更点（解説表示エリアの追加）。
+
+なお、Vertex AIの初期化やIAM設定についてはコード化不要ですが、必要な権限（`roles/aiplatform.user` 等）についてはコメントで補足してください。
 
 
 ## Phase 2: アーキテクチャ設計
