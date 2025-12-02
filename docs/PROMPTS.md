@@ -95,7 +95,32 @@ Canvas上の音符の描画ロジックを修正してください。
 
 これらの変更を反映した `MusicScreen` および `SheetMusic` コンポーザブルのコードを提示してください。
 
+**Prompt**:# Bug Fix Request: Auto-Scroll Camera Follow
 
+現状の実装では、再生中に縦棒（Playhead）だけが右へ進んでしまい、画面の外に消えてしまいます。
+ユーザーが手動でスクロールしなくても、**「常に縦棒が画面内に表示され続ける（カメラが縦棒を追いかける）」**ように修正してください。
+
+## Required Changes (修正要件)
+
+### 1. Synchronize ScrollState with Animation
+`LaunchedEffect` を使用して、再生アニメーションの値（縦棒のX座標）を監視し、その値が変わるたびに `ScrollState` を更新するロジックを追加してください。
+
+### 2. Centering Logic (中央追従ロジック)
+縦棒が画面の端ギリギリになってからスクロールするのではなく、**「縦棒が常に画面の中央付近に来るように」**スクロール位置を制御するのが理想です。
+
+以下の計算ロジックを参考に実装してください：
+- `targetScrollPosition = currentPlayheadX - (screenWidth / 2)`
+- ※ただし、`targetScrollPosition` が 0未満になる場合や、最大スクロール幅を超える場合の境界値チェック（clamp）を含めてください。
+
+### 3. Implementation Context
+- `BoxWithConstraints` を使用して、現在の画面幅（`maxWidth`）を取得してください。
+- `rememberScrollState()` で作成した state に対して、アニメーションのフレーム毎に `scrollTo` を呼び出してください。
+
+## Expected Behavior
+- 再生ボタンを押すと、縦棒が右へ進む。
+- 縦棒が画面中央を超えたあたりから、背景の五線譜が左へ流れ始め、縦棒は画面中央に維持されているように見える（または、縦棒に合わせて画面がスムーズに右へスクロールしていく）。
+
+この挙動を実現するための `MusicScreen` 内の `LaunchedEffect` 周りの修正コードを提示してください。
 
 
 ## Phase 2: アーキテクチャ設計
