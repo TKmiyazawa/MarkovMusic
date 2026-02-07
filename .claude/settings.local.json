@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew:*)",
+      "Bash(cat:*)",
+      "Bash(adb logcat:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(tree:*)",
+      "Bash(git rm:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nセキュリティ強化: APIキー漏洩防止とREADME整備\n\n## セキュリティ対策\n- Config.xcconfigをGit管理から除外（APIキー漏洩防止）\n- Config.xcconfig.templateをテンプレートとして追加\n- .gitignoreを強化（署名キー、証明書、ビルド成果物を除外）\n\n## ドキュメント\n- README.mdを全面改訂（プロジェクト概要、技術スタック、セットアップ手順）\n- iOS用設定ファイルの作成手順を追記\n\n## 除外項目の追加\n- *.jks, *.keystore（署名キー）\n- *.pem, *.p12（証明書）\n- google-services.json, secrets.properties\n- DerivedData/, *.dSYM（iOSビルド成果物）\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(gh auth status:*)",
+      "Bash(brew install:*)",
+      "Bash(gh auth login:*)",
+      "Bash(gh auth:*)",
+      "Bash(git commit:*)",
+      "WebSearch",
+      "Bash(git checkout:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
